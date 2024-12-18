@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Receitas - CLIMATIZA JF</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #1E90FF;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #1E90FF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #4682B4;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #1E90FF;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de Receita</h1>
+        <label for="receita">Digite a Receita Total (R$):</label>
+        <input type="number" id="receita" placeholder="Ex: 500" />
+
+        <label for="despesaPercentual">Percentual de Despesa (%):</label>
+        <input type="number" id="despesaPercentual" placeholder="Ex: 20" />
+
+        <label for="fundoPercentual">Percentual do Fundo de Expansão (%):</label>
+        <input type="number" id="fundoPercentual" placeholder="Ex: 9" />
+
+        <button onclick="calcular()">Calcular</button>
+
+        <div class="result" id="resultado"></div>
+    </div>
+
+    <script>
+        function calcular() {
+            const receita = parseFloat(document.getElementById('receita').value);
+            const despesaPercentual = parseFloat(document.getElementById('despesaPercentual').value);
+            const fundoPercentual = parseFloat(document.getElementById('fundoPercentual').value);
+
+            if (isNaN(receita) || isNaN(despesaPercentual) || isNaN(fundoPercentual)) {
+                alert('Por favor, preencha todos os campos corretamente.');
+                return;
+            }
+
+            // Cálculo das despesas
+            const despesas = (despesaPercentual / 100) * receita;
+            const fundo = (fundoPercentual / 100) * receita;
+            const restante = receita - despesas - fundo;
+
+            // Participações
+            const oscarRecebe = restante * 0.3;
+            const hudsonRecebe = restante * 0.7;
+            const oscarPagaDespesa = despesas * 0.3;
+            const hudsonPagaDespesa = despesas * 0.7;
+
+            // Exibindo o resultado
+            const resultadoDiv = document.getElementById('resultado');
+            resultadoDiv.innerHTML = `
+                <h3>Resultados:</h3>
+                <p><strong>Total das Despesas:</strong> R$ ${despesas.toFixed(2)}</p>
+                <p><strong>Fundo de Expansão:</strong> R$ ${fundo.toFixed(2)}</p>
+                <p><strong>Valor Restante:</strong> R$ ${restante.toFixed(2)}</p>
+                <p><strong>Oscar Recebe:</strong> R$ ${oscarRecebe.toFixed(2)}</p>
+                <p><strong>hudson Recebe:</strong> R$ ${hudsonRecebe.toFixed(2)}</p>
+                <p><strong>Oscar Paga de Despesa:</strong> R$ ${oscarPagaDespesa.toFixed(2)}</p>
+                <p><strong>hudson Paga de Despesa:</strong> R$ ${hudsonPagaDespesa.toFixed(2)}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
+
+<div class="container">
+    <h2>Gerar Relatório</h2>
+    <button onclick="gerarRelatorio()">Gerar Relatório</button>
+    <textarea id="relatorio" rows="10" style="width: 100%; margin-top: 20px;" readonly></textarea>
+</div>
+
+<script>
+    function gerarRelatorio() {
+        const receita = parseFloat(document.getElementById('receita').value);
+        const despesaPercentual = parseFloat(document.getElementById('despesaPercentual').value);
+        const fundoPercentual = parseFloat(document.getElementById('fundoPercentual').value);
+
+        if (isNaN(receita) || isNaN(despesaPercentual) || isNaN(fundoPercentual)) {
+            alert('Por favor, preencha todos os campos corretamente antes de gerar o relatório.');
+            return;
+        }
+
+        // Cálculo das despesas e divisões
+        const despesas = (despesaPercentual / 100) * receita;
+        const fundo = (fundoPercentual / 100) * receita;
+        const restante = receita - despesas - fundo;
+
+        const oscarRecebe = restante * 0.3;
+        const hudsonRecebe = restante * 0.7;
+        const oscarPagaDespesa = despesas * 0.3;
+        const hudsonPagaDespesa = despesas * 0.7;
+
+        // Gerando o relatório
+        const relatorio = `
+RELATÓRIO FINANCEIRO - CLIMATIZA JF
+----------------------------------
+Receita Total: R$ ${receita.toFixed(2)}
+
+Despesas:
+- Total de Despesas: R$ ${despesas.toFixed(2)}
+- Fundo de Expansão: R$ ${fundo.toFixed(2)}
+- Valor Restante: R$ ${restante.toFixed(2)}
+
+Divisão de Valores:
+- Oscar Recebe: R$ ${oscarRecebe.toFixed(2)}
+- hudson Recebe: R$ ${hudsonRecebe.toFixed(2)}
+
+Participação nas Despesas:
+- Oscar Paga: R$ ${oscarPagaDespesa.toFixed(2)}
+- hudson      Paga: R$ ${hudsonPagaDespesa.toFixed(2)}
+        `;
+
+        // Exibindo o relatório no textarea
+        document.getElementById('relatorio').value = relatorio;
+    }
+</script>
